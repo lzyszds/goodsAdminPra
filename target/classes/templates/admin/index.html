@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>20200216263黎智勇springboot作业</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link th:href="@{/layui/css/layui.css}" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/index.css}">
+
+</head>
+<body>
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-header">
+        <div class="layui-logo layui-hide-xs layui-bg-black">SpringBoot Demo</div>
+        <!-- 头部区域（可配合layui 已有的水平导航） -->
+        <!--退出登录-->
+        <ul class="layui-nav layui-layout-right">
+            <a class="signOut" style="color: white" href="/out">
+                <button class="noselect">
+                    <span class="text">
+                        <i class="layui-icon layui-icon-user" style="font-size: 14px; "></i>
+                        <span id="username" th:text="${user_name}">Delete</span>
+                    </span>
+                    <span class="icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                            <path d="M24 20.188l-8.315-8.209 8.2-8.282-3.697-3.697-8.212 8.318-8.31-8.203-3.666 3.666 8.321 8.24-8.206 8.313 3.666 3.666 8.237-8.318 8.285 8.203z"></path>
+                        </svg>
+                    </span>
+                </button>
+            </a>
+        </ul>
+    </div>
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            <ul class="layui-nav layui-nav-tree" lay-filter="test">
+                <li class="layui-nav-item layui-this"><a th:href="@{/admin/index}" href="">用户管理</a></li>
+                <li class="layui-nav-item"><a th:href="@{/admin/goods}">商品管理</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="layui-body">
+        <!-- 内容主体区域 -->
+        <div style="padding: 15px;">
+            <div class="layui-btn-container" style="display: flex">
+                <button class="layui-btn" lay-on="add">添加用户</button>
+                <input type="text" name="A" value="" placeholder="输入要查询的内容(id、username、email)  ---回车查询"
+                       class="layui-input"
+                       lay-affix="clear">
+                <button class="layui-btn" lay-on="search">搜索用户</button>
+            </div>
+            <div class="table">
+                <table border="1">
+                    <tr>
+                        <td width="80">id</td>
+                        <td width="300">用户名</td>
+                        <td width="300">密码</td>
+                        <td width="200">用户权限</td>
+                        <td width="80">状态</td>
+                        <td width="500">邮箱</td>
+                        <td width="320">创建时间</td>
+                        <td width="160">操作</td>
+                    </tr>
+                    <tr th:each="item:${dataTable}">
+                        <td th:text="${item.id}"></td>
+                        <td th:text="${item.username}"></td>
+                        <td th:text="${item.password}"></td>
+                        <td>
+                            <span class="layui-badge layui-bg-green"
+                                  th:text="${item.power==0?'管理员':'普通用户'}"></span>
+                        </td>
+                        <td>
+                            <span th:class="${item.status==0?'layui-badge layui-bg-badge':'layui-badge layui-bg-green'}"
+                                  th:text="${item.status==0?'离线':'在线'}"></span>
+                        </td>
+                        <td th:text="${item.email}"></td>
+                        <td th:text="${item.create_time}"></td>
+                        <td>
+                            <a th:data-id="${item.id}" lay-on="delect">删除</a>
+                            <a th:data="${item.username}" th:check="${item.power}" lay-on="update">修改</a>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div id="demo-laypage-limits"></div>
+        </div>
+    </div>
+</div>
+<script type="text/html" id="addformTemplate">
+    <form class="layui-form" method="post" th:action="@{/register}" lay-filter="demo-val-addfilter">
+        <div class="layui-form-item layui-form">
+            <label class="layui-form-label">用户级别：</label>
+            <div class="layui-input-block">
+                <input type="radio" name="power" value="1" title="普通用户" checked>
+                <input type="radio" name="power" value="0" title="管理员">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">用户名：</label>
+            <div class="layui-input-block">
+                <input type="text" name="username" lay-verify="required" placeholder="请输入用户名"
+                       class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">邮箱：</label>
+            <div class="layui-input-block">
+                <input type="email" name="email" placeholder="请输入email" lay-verify="required" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">密码：</label>
+            <div class="layui-input-block">
+                <input type="password" name="password" placeholder="请输入密码" lay-verify="required"
+                       class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">重复密码：</label>
+            <div class="layui-input-block">
+                <input type="password" name="repassword" placeholder="请输入再次输入密码" lay-verify="required"
+                       class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item" style="display: none">
+            <label class="layui-form-label">类型：</label>
+            <div class="layui-input-block">
+                <input type="password" name="type" value="index" class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button class="layui-btn" lay-submit lay-filter="demo2">立即提交</button>
+
+                <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+            </div>
+        </div>
+    </form>
+</script>
+<script type="text/html" id="updateformTemplate">
+    <form class="layui-form" method="post" th:action="@{/update}" lay-filter="demo-val-filter">
+        <div class="layui-form-item layui-form">
+            <label class="layui-form-label">用户级别：</label>
+            <div class="layui-input-block">
+                <input type="radio" name="power" value="1" title="普通用户">
+                <input type="radio" name="power" value="0" title="管理员">
+            </div>
+        </div>
+        <div class="layui-form-item" id="updateUserName">
+            <label class="layui-form-label">用户名： </label>
+            <div class="layui-input-block">
+                <input type="text" name="username" lay-verify="required" autoComplete="off" placeholder="请输入用户名"
+                       class="layui-input layui-hide">
+                <p style="color: #007bff;line-height: 36px;font-size: 20px;min-height: 36px;"></p>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">邮箱：</label>
+            <div class="layui-input-block">
+                <input type="email" name="email" placeholder="请输入email" lay-verify="required" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">密码：</label>
+            <div class="layui-input-block">
+                <input type="password" name="password" placeholder="请输入密码" lay-verify="required"
+                       class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">重复密码：</label>
+            <div class="layui-input-block">
+                <input type="password" name="repassword" placeholder="请输入再次输入密码" lay-verify="required"
+                       class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button class="layui-btn" lay-submit lay-filter="demo2">立即提交</button>
+
+                <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+            </div>
+        </div>
+    </form>
+</script>
+</body>
+</html>
+<script th:src="@{/layui/layui.js}"></script>
+<script>
+    var $ = window.$ = layui.$
+    const searchInput = $(".layui-input[name='A']")
+    //给搜索框获取焦点
+    searchInput.focus()
+    // fetch("/userApi/userStatusOper?status=1&username=" + $("#username").text())
+
+    layui.use(['table'], async function () {
+        const layer = layui.layer;
+        const util = layui.util;
+        var form = layui.form;
+
+        var laypage = layui.laypage;
+        //当前页数
+        const locationsearch = window.location.search.replace("?", "").split("&&")
+        const newCurr = (!locationsearch[0] ? 1 : locationsearch[0].split("=")[1]) || 1
+        const newLimit = (!locationsearch[0] ? 5 : locationsearch[1].split("=")[1]) || 5
+        const newSearch = !locationsearch[0] ? "" : locationsearch[2].split("=")[1]
+        searchInput.val(newSearch)
+
+        const response = await fetch("/userApi/allUserLength?search=" + newSearch)
+        const {data} = await response.json();
+
+        util.on('lay-on', {
+            add: function () {
+                layer.open({
+                    title: '添加用户',
+                    type: 1,
+                    area: ['500px', '450px'],
+                    content: `<div style="padding: 16px 32px 16px 16px;">${$('#addformTemplate').html()}</div>`,
+                    success: function () {
+                        // 对弹层中的表单进行初始化渲染
+                        form.render();
+                    }
+                });
+            },
+            update: function () {
+                layer.open({
+                    title: '修改用户',
+                    type: 1,
+                    area: ['500px', '450px'],
+                    content: `<div id="updateform" style="padding: 16px 32px 16px 16px;">${$('#updateformTemplate').html()}</div>`,
+
+                });
+                $("#updateform").find('div>p').text($(this).attr('data'))
+                $("#updateform").find('div>input[name="username"]').val($(this).attr('data'))
+                const radio = $("#updateform").find('input[name="power"]')
+                const t = this
+                radio.each((index, element) => {
+                    console.log($(t).attr('check'), $(element).val())
+                    $(element).attr("checked", $(t).attr('check') == $(element).val())
+                })
+                form.render();
+            },
+            search: function () {
+                const search = searchInput.val()
+                window.location.href = `/admin/index?page=1&&limit=${newLimit}&&search=${search}`
+            },
+            delect: function () {
+                const that = this
+                layer.confirm(`确定要删除这个用户吗？`, {icon: 3}, function () {
+                    layer.msg('删除成功！！', {icon: 1});
+
+                    fetch('/deletUser?id=' + $(that).attr("data-id"))
+                        .then(res => {
+                            window.location.reload()
+                        })
+                        .catch(err => {
+                            console.log(err)
+                        })
+                }, function () {
+                    layer.msg('取消！！');
+                });
+            }
+        });
+        searchInput.on('keydown', function (event) {
+            var keyCode = event.keyCode;
+            if (keyCode === 13) {
+                util.on["lay-on"].search()
+            }
+        })
+        // 自定义每页条数的选择项
+        laypage.render({
+            elem: 'demo-laypage-limits',
+            count: data,
+            limit: newLimit,
+            curr: newCurr,
+            limits: [5, 10, 15],
+            layout: ['prev', 'page', 'next', 'limit'],
+            jump: function (obj, first) {
+                // 首次不执行
+                if (!first) {
+                    const search = searchInput.val()
+                    window.location.href = `/admin/index?page=${obj.curr}&&limit=${obj.limit}&&search=${search}`
+                }
+            }
+        });
+    });
+</script>
+</body>
+</html>

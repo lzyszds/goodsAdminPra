@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1,shrink-to-fit=no">
+    <title>用户登录界面</title>
+    <link th:href="@{/login/css/signin.css}" rel="stylesheet">
+</head>
+<body class="text-center">
+<!--  用户登录form表单 -->
+<div class="main">
+    <div class="register">
+        <form class="form" method="post" th:action="@{/register}">
+            <label aria-hidden="true">注册</label>
+            <input class="input" type="text" name="username" placeholder="Username" required="">
+            <input class="input" type="email" name="email" placeholder="Email" required="">
+            <input class="input" type="password" name="password" placeholder="Password" required="">
+            <input class="input" type="password" name="repassword" placeholder="Retype Password" required="">
+            <input name="tpye" value="login" style="display: none">
+            <button type="submit">注册</button>
+        </form>
+    </div>
+</div>
+</body>
+</html>

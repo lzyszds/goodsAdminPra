@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+<span id="viewing">0</span>人正在看
+<script th:src="@{/layui/layui.js}"></script>
+
+<script>
+    const $ = window.$ = layui.$
+    //观看人数统计
+    var ws;
+    var target = "ws:localhost:8083/content_websocket?content_id=123";
+
+    $(function () {
+
+        //处理浏览器兼容性
+        if ('WebSocket' in window) {
+            ws = new WebSocket(target);
+        } else if ('MozWebSocket' in window) {
+            ws = new MozWebSocket(target);
+        } else {
+            alert('WebSocket is not supported by this browser.');
+            return;
+        }
+
+        ws.onopen = function () {
+            ws.send('${content.id}')
+        };
+        ws.onmessage = function (event) {
+            $("#viewing").html(event.data);
+        };
+
+        ws.onclose = function (event) {
+
+        }
+
+    })
+</script>
+</body>
+</html>

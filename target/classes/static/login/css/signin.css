@@ -1,0 +1,144 @@
+.text-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+    margin: 0;
+    height: 100vh;
+    /*background: url("../img/back.jpg") no-repeat center center;*/
+    background-size: cover;
+}
+
+.main {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    /*background-color: #240046;*/
+    width: 350px;
+    max-height: 550px;
+    overflow: hidden;
+    border-radius: 12px;
+    box-shadow: 12px 17px 51px rgba(0, 0, 0, 0.22);
+    transition: all 0.5s;
+    border: 1px solid white;
+    border-radius: 17px;
+    box-sizing: border-box;
+    background: rgba(217, 217, 217, 0.58);
+    border: 1px solid white;
+    box-shadow: 12px 17px 51px rgba(0, 0, 0, 0.22);
+    backdrop-filter: blur(6px);
+}
+
+.main:hover {
+    box-shadow: 12px 17px 51px rgba(0, 0, 0, 0.22);
+    border: 1px solid black;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    padding: 24px;
+}
+
+/*checkbox to switch from sign up to login*/
+#chk {
+    display: none;
+}
+
+/*Login*/
+.login {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.login label {
+    margin: 5% 0 0;
+}
+
+label {
+    color: #000;
+    font-size: 2rem;
+    justify-content: center;
+    display: flex;
+    font-weight: bold;
+    cursor: pointer;
+    transition: .5s ease-in-out;
+}
+
+.input {
+    height: 20px;
+    padding: 12px;
+    border-radius: 4px;
+    border: 2px solid lightgrey;
+    outline: none;
+    transition: all 0.3s cubic-bezier(0.19, 1, 0.22, 1);
+    box-shadow: 0px 0px 20px -18px;
+}
+
+.input:focus {
+    border: 2px solid grey;
+}
+
+.input:active {
+    transform: scale(0.95);
+}
+
+.input.checking {
+    width: 50%;
+}
+
+/*Register*/
+.register {
+    background: #eee;
+    border-radius: 60% / 10%;
+    transform: translateY(5%);
+    transition: .8s ease-in-out;
+}
+
+.register label {
+    color: #573b8a;
+    transform: scale(.6);
+}
+
+#chk:checked ~ .register {
+    transform: translateY(-60%);
+}
+
+#chk:checked ~ .register label {
+    transform: scale(1);
+    margin: 10% 0 5%;
+}
+
+#chk:checked ~ .login label {
+    transform: scale(.6);
+    margin: 5% 0 5%;
+}
+
+/*Button*/
+.form button, .form a {
+    width: 100%;
+    height: 40px;
+    text-align: center;
+    line-height: 40px;
+    margin: 0 auto;
+    color: #fff;
+    background: #573b8a;
+    font-size: 1rem;
+    font-weight: bold;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: .2s ease-in;
+}
+
+.form button:hover, .form a:hover {
+    background-color: #6d44b8;
+}
+
+.form img {
+    border-radius: 4px;
+    margin: 3px;
+    border: 2px solid;
+}

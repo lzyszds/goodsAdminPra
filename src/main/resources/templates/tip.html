@@ -1,0 +1,33 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charSet="UTF-8">
+    <title>Title</title>
+    <link th:href="@{/layui/css/layui.css}" rel="stylesheet">
+
+</head>
+<body>
+<div id="msg" th:data="${msg}"></div>
+</body>
+<script th:src="@{/layui/layui.js}"></script>
+<script>
+    let $ = layui.$
+    const val = $("#msg").attr("data")
+    layer.alert(val, {
+        time: 3 * 1000,
+        success: function (layero, index) {
+            var timeNum = this.time / 1000, setText = function (start) {
+                layer.title('<span class="layui-font-red">' + (start ? timeNum : --timeNum) + '</span> 秒后自动跳转至首页', index);
+            };
+            setText(!0);
+            this.timer = setInterval(setText, 1000);
+            if (timeNum <= 0) clearInterval(this.timer);
+        },
+        end: function () {
+            window.location.href = '/admin/index'
+            clearInterval(this.timer);
+        }
+    });
+</script>
+</html>

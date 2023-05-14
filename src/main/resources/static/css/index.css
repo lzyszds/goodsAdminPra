@@ -1,0 +1,116 @@
+.table {
+    table-layout: fixed;
+    word-break: break-all;
+    text-align: center;
+    /*height: 250px;*/
+    width: 900px;
+}
+
+tr {
+    height: 35px;
+}
+
+td {
+    padding: 5px 0;
+}
+
+td a {
+    color: white;
+    background-color: #ff5722;
+    cursor: pointer;
+    font-size: 13px;
+    padding: 3px;
+    border-radius: 2px;
+}
+
+td a:hover {
+    color: white;
+}
+
+td a:nth-child(2) {
+    background-color: #16baaa;
+}
+td img{
+    object-fit: cover;
+}
+
+.signOut button {
+    width: 150px;
+    height: 40px;
+    margin-top: 10px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    background: #16baaa;
+    border: none;
+    border-radius: 4px;
+    box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.15);
+}
+
+.signOut button, .signOut button span {
+    transition: 200ms ;
+}
+
+.signOut button .text {
+    transform: translateX(35px);
+    color: white;
+    font-weight: bold;
+}
+
+.signOut button .icon {
+    position: absolute;
+    border-left: 1px solid #ff5722;
+    transform: translateX(110px);
+    height: 40px;
+    width: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.signOut button svg {
+    width: 15px;
+    fill: #eee;
+}
+
+.signOut button:hover {
+    background: #ff5722;
+}
+
+.signOut button:hover .text {
+    color: transparent;
+}
+
+.signOut button:hover .icon {
+    width: 150px;
+    border-left: none;
+    transform: translateX(0);
+}
+
+.signOut button:focus {
+    outline: none;
+}
+
+.signOut button:active .icon svg {
+    transform: scale(0.8);
+}
+
+.layui-form-item{
+    position: relative;
+}
+.layui-form-item.submit {
+    display: flex;
+    justify-content: center;
+    margin-top: 40px;
+}
+#ID-upload-demo-btn {
+    position: absolute;
+    top: 0;
+    height: 92px;
+    width: 230px;
+    text-align: center;
+    line-height: 92px;
+    cursor: pointer;
+    user-select: none;
+    text-shadow: 0px 0px 10px #fff;
+}

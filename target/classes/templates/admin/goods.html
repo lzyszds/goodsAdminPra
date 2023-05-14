@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>20200216263黎智勇springboot作业</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link th:href="@{/layui/css/layui.css}" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/index.css}">
+</head>
+<body>
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-header">
+        <div class="layui-logo layui-hide-xs layui-bg-black">SpringBoot Demo</div>
+        <!-- 头部区域（可配合layui 已有的水平导航） -->
+
+        <!--退出登录-->
+        <ul class="layui-nav layui-layout-right">
+            <a class="signOut" style="color: white" href="/out">
+                <button class="noselect">
+                    <span class="text">
+                        <i class="layui-icon layui-icon-user" style="font-size: 14px; "></i>
+                        <span id="username" th:text="${user_name}">Delete</span>
+                    </span>
+                    <span class="icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                            <path d="M24 20.188l-8.315-8.209 8.2-8.282-3.697-3.697-8.212 8.318-8.31-8.203-3.666 3.666 8.321 8.24-8.206 8.313 3.666 3.666 8.237-8.318 8.285 8.203z"></path>
+                        </svg>
+                    </span>
+                </button>
+            </a>
+        </ul>
+    </div>
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            <ul class="layui-nav layui-nav-tree" lay-filter="test">
+                <li th:if="${ispower}" class="layui-nav-item"><a th:href="@{/admin/index}">用户管理</a></li>
+                <li class="layui-nav-item layui-this"><a th:href="@{/admin/goods}">商品管理</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="layui-body">
+        <!-- 内容主体区域 -->
+        <div style="padding: 15px;">
+            <div class="layui-btn-container" style="display: flex">
+                <button class="layui-btn" lay-on="add">添加商品</button>
+                <input type="text" name="A" value="" placeholder="输入要查询的内容(id、username、email)  ---回车查询"
+                       class="layui-input"
+                       lay-affix="clear">
+                <button class="layui-btn" lay-on="search">搜索商品</button>
+            </div>
+            <div class="table" style="width: 900px">
+                <table border="1">
+                    <tr>
+                        <td width="80">id</td>
+                        <td width="300">商品名</td>
+                        <td width="100">商品价格</td>
+                        <td width="100">商品类型</td>
+                        <td width="140">商品图片</td>
+                        <td width="150">商品数量</td>
+                        <td width="80">状态</td>
+                        <td width="220">上架时间</td>
+                        <td width="160">操作</td>
+                    </tr>
+                    <tr th:each="item:${dataTable}">
+                        <td th:text="${item.g_id}"></td>
+                        <td th:text="${item.g_titleName}"></td>
+                        <td th:text="'￥'+${item.g_price}"></td>
+                        <td th:text="${item.g_goodsType}"></td>
+                        <td style="display: flex;justify-content: center;align-content: center;gap: 3px;">
+                            <img width="80" height="40" th:src="${item.g_picture}" src="" alt="">
+                            <a style="width: 15px" download th:href="${item.g_picture}">下载</a>
+                        </td>
+                        <td th:text="${item.g_number}"></td>
+                        <td th:text="${item.g_status}"></td>
+                        <td th:text="${item.g_createTime}"></td>
+                        <td>
+                            <a th:data-id="${item.g_id}" class="delect" lay-on="delect">删除</a>
+                            <a th:data="${item}" lay-on="update">修改</a>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div id="demo-laypage-limits"></div>
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>
+<script type="text/html" id="addformTemplate">
+    <form class="layui-form" method="post" th:action="@{/addGoods}" lay-filter="demo-val-addfilter">
+        <div class="layui-form-item layui-form">
+            <label class="layui-form-label">商品标题：</label>
+            <div class="layui-input-block">
+                <input type="text" name="titleName" class="layui-input" placeholder="请输入商品标题"
+                       lay-verify="required">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">商品价格：</label>
+            <div class="layui-input-block">
+                <input type="text" name="price" min="0" placeholder="￥请输入价格" class="layui-input"
+                       lay-verify="required|price">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">商品数量：</label>
+            <div class="layui-input-block">
+                <input type="number" name="number" min="0" value="100" placeholder="请输入数量" class="layui-input"
+                       lay-verify="required">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">商品类型：</label>
+            <div class="layui-input-block">
+                <input type="radio" name="goodsType" value="1" title="零食" checked>
+                <input type="radio" name="goodsType" value="0" title="饮料">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">商品状态：</label>
+            <div class="layui-input-block">
+                <input type="radio" name="status" value="1" title="上线" checked>
+                <input type="radio" name="status" value="0" title="下线">
+            </div>
+        </div>
+        <div class="layui-form-item layui-hide">
+            <div class="layui-input-block">
+                <input id="picture" type="text" name="picture" class="layui-input" lay-verify="required">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">商品图片：</label>
+            <div class="layui-input-block" style="width: 230px;margin: 0 auto;">
+                <div class="layui-upload-list">
+                    <img class="layui-upload-img" id="ID-upload-demo-img" style="width: 100%; height: 92px;">
+                    <div id="ID-upload-demo-text"></div>
+                </div>
+                <div class="layui-progress layui-progress-big" lay-showPercent="yes" lay-filter="filter-demo">
+                    <div class="layui-progress-bar" lay-percent="">
+                        <span class="layui-progress-text"></span>
+                    </div>
+                </div>
+                <div id="ID-upload-demo-btn"><i class="layui-icon layui-icon-upload"></i> 商品图片上传</div>
+            </div>
+
+        </div>
+        <div class="layui-form-item submit">
+            <button class="layui-btn" lay-submit lay-filter="demo2">立即提交</button>
+            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+        </div>
+
+    </form>
+</script>
+<script type="text/html" id="updateformTemplate">
+    <form class="layui-form" method="post" th:action="@{/updateGoods}" lay-filter="demo-val-addfilter">
+        <div class="layui-form-item layui-form layui-hide">
+            <label class="layui-form-label">商品id：</label>
+            <div class="layui-input-block">
+                <input type="text" name="id" class="layui-input" placeholder="id"
+                       lay-verify="required">
+            </div>
+        </div>
+        <div class="layui-form-item layui-form">
+            <label class="layui-form-label">商品标题：</label>
+            <div class="layui-input-block">
+                <input type="text" name="titleName" class="layui-input" placeholder="请输入商品标题"
+                       lay-verify="required">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">商品价格：</label>
+            <div class="layui-input-block">
+                <input type="text" name="price" min="0" placeholder="￥请输入价格" class="layui-input"
+                       lay-verify="required|price">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">商品数量：</label>
+            <div class="layui-input-block">
+                <input type="number" name="number" min="0" value="100" placeholder="请输入数量" class="layui-input"
+                       lay-verify="required">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">商品类型：</label>
+            <div class="layui-input-block">
+                <input type="radio" name="goodsType" value="1" title="零食" checked>
+                <input type="radio" name="goodsType" value="0" title="饮料">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">商品状态：</label>
+            <div class="layui-input-block">
+                <input type="radio" name="status" value="1" title="上线" checked>
+                <input type="radio" name="status" value="0" title="下线">
+            </div>
+        </div>
+        <div class="layui-form-item layui-hide">
+            <div class="layui-input-block">
+                <input id="picture" type="text" name="picture" class="layui-input" lay-verify="required">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">商品图片：</label>
+            <div class="layui-input-block" style="width: 230px;margin: 0 auto;">
+                <div class="layui-upload-list">
+                    <img class="layui-upload-img" id="ID-upload-demo-img" style="width: 100%; height: 92px;">
+                    <div id="ID-upload-demo-text"></div>
+                </div>
+                <div class="layui-progress layui-progress-big" lay-showPercent="yes" lay-filter="filter-demo">
+                    <div class="layui-progress-bar" lay-percent="">
+                        <span class="layui-progress-text"></span>
+                    </div>
+                </div>
+                <div id="ID-upload-demo-btn"><i class="layui-icon layui-icon-upload"></i><span
+                        style="background-color: white">图片上传</span></div>
+            </div>
+
+        </div>
+        <div class="layui-form-item submit">
+            <button class="layui-btn" lay-submit lay-filter="demo2">立即提交</button>
+            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+        </div>
+
+    </form>
+</script>
+<script th:src="@{/layui/layui.js}"></script>
+<script>
+    var $ = window.$ = layui.$
+    const searchInput = $(".layui-input[name='A']")
+    searchInput.focus()
+    // fetch("/userApi/userStatusOper?status=1&username=" + $("#username").text())
+
+    layui.use(['table'], async function () {
+        const element = layui.element
+        const layer = layui.layer;
+        const util = layui.util;
+        const form = layui.form;
+        const upload = layui.upload;
+        const laypage = layui.laypage;
+        //当前页数
+        const locationsearch = window.location.search.replace("?", "").split("&&")
+        const newCurr = (!locationsearch[0] ? 1 : locationsearch[0].split("=")[1]) || 1
+        const newLimit = (!locationsearch[0] ? 5 : locationsearch[1].split("=")[1]) || 5
+        const newSearch = decodeURIComponent(!locationsearch[0] ? "" : locationsearch[2].split("=")[1])
+        searchInput.val(newSearch)
+
+        const response = await fetch("/userApi/allGoodsLength?search=" + newSearch)
+        const {data} = await response.json();
+
+        util.on('lay-on', {
+            add: function () {
+                layer.open({
+                    title: '添加用户',
+                    type: 1,
+                    area: ['600px', '600px'],
+                    content: `<div style="padding: 16px 32px 16px 16px;">${$('#addformTemplate').html()}</div>`,
+                    success: function () {
+                        // 对弹层中的表单进行初始化渲染
+                        form.render();
+                        updateImg(upload, element)
+                    }
+                });
+            },
+            update: function () {
+                layer.open({
+                    title: '修改用户',
+                    type: 1,
+                    area: ['600px', '600px'],
+                    content: `<div id="updateform" style="padding: 16px 32px 16px 16px;">${$('#updateformTemplate').html()}</div>`,
+
+                });
+                // 对弹层中的表单进行初始化渲染
+                const inputs = $("#updateform").find("input")
+                let thData = $(this).attr("data").replace("Goods{", "").replace("}", "").replaceAll(" ", "").replaceAll("'", "").split(',')
+                let newData = {}
+                for (const item of thData) {
+                    const key = item.split("=")[0].replace("g_", "")
+                    const value = item.split("=")[1]
+                    newData[key] = value
+                }
+                console.log(newData)
+                inputs.each((index, item) => {
+                    const val = newData[$(item).attr("name")]
+                    $(item).val(val)
+                    if ($(item).attr("name") == "picture") {
+                        $("#ID-upload-demo-img").attr("src", val)
+                    }
+                })
+
+                form.render();
+            },
+            search: function () {
+                const search = searchInput.val()
+                window.location.href = `/admin/goods?page=${newCurr}&&limit=${newLimit}&&search=${search}`
+            },
+            delect: function () {
+                const that = this
+                layer.confirm(`确定要删除这个用户吗？`, {icon: 3}, function () {
+                    layer.msg('删除成功！！', {icon: 1});
+
+                    fetch('/deleteGoods?id=' + $(that).attr("data-id"))
+                        .then(res => {
+                            window.location.reload()
+                        })
+                        .catch(err => {
+                            console.log(err)
+                        })
+                }, function () {
+                    layer.msg('取消！！');
+                });
+            }
+        });
+        searchInput.on('keydown', function (event) {
+            var keyCode = event.keyCode;
+            if (keyCode === 13) {
+                util.on["lay-on"].search()
+            }
+        })
+        // 自定义每页条数的选择项
+        laypage.render({
+            elem: 'demo-laypage-limits',
+            count: data,
+            limit: newLimit,
+            curr: newCurr,
+            limits: [5, 10, 15],
+            layout: ['prev', 'page', 'next', 'limit'],
+            jump: function (obj, first) {
+                // 首次不执行
+                if (!first) {
+                    const search = searchInput.val()
+                    window.location.href = `/admin/goods?page=${obj.curr}&&limit=${obj.limit}&&search=${search}`
+                }
+            }
+        });
+        form.verify({
+            // 数组中两个成员值分别代表：[正则表达式、正则匹配不符时的提示文字]
+            price: [/^-?\d{1,10}(,\d{3})*(\.\d{1,2})?$/, '价格必须是数字']
+        });
+    });
+
+
+    function updateImg(upload, element) {
+        var uploadInst = upload.render({
+            elem: '#ID-upload-demo-btn',
+            url: '/userApi/upload', // 此处用的是第三方的 http 请求演示，实际使用时改成您自己的上传接口即可。
+            before: function (obj) {
+                // 预读本地文件示例，不支持ie8
+                obj.preview(function (index, file, result) {
+                    $('#ID-upload-demo-img').attr('src', result); // 图片链接（base64）
+                });
+
+                element.progress('filter-demo', '0%'); // 进度条复位
+                layer.msg('上传中', {icon: 16, time: 0});
+            },
+            done: function (res) {
+                // 若上传失败
+                if (res.code > 0) {
+                    return layer.msg('上传失败');
+                }
+                // 上传成功的一些操作
+                $("#picture").val(res.data)
+                // …
+                $('#ID-upload-demo-text').html(''); // 置空上传失败的状态
+            },
+            error: function () {
+                // 演示失败状态，并实现重传
+                var demoText = $('#ID-upload-demo-text');
+                demoText.html('<span style="color: #FF5722;">上传失败</span> <a class="layui-btn layui-btn-xs demo-reload">重试</a>');
+                demoText.find('.demo-reload').on('click', function () {
+                    uploadInst.upload();
+                });
+            },
+            // 进度条
+            progress: function (n, elem, e) {
+                element.progress('filter-demo', n + '%'); // 可配合 layui 进度条元素使用
+                if (n == 100) {
+                    layer.msg('上传完毕', {icon: 1});
+                }
+            }
+        });
+    }
+
+    // window.onbeforeunload = function () {
+    //     console.log("你关闭了浏览器")
+    //     fetch("/userApi/userStatusOper?status=0&username=" + $("#username").text())
+    //     return ""
+    // }
+</script>
+</body>
+</html>

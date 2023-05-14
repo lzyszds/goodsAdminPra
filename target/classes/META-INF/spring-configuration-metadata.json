@@ -1,0 +1,12 @@
+{
+  "groups": [
+    {
+      "name": "spring.datasource",
+      "type": "javax.sql.DataSource",
+      "sourceType": "com.example.demo005.config.DataSourceConfig",
+      "sourceMethod": "getDruid()"
+    }
+  ],
+  "properties": [],
+  "hints": []
+}

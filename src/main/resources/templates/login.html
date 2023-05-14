@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1,shrink-to-fit=no">
+    <title>用户登录界面</title>
+    <link th:href="@{/login/css/signin.css}" rel="stylesheet">
+</head>
+<body class="text-center">
+<!--  用户登录form表单 -->
+<div class="main">
+    <div class="login">
+        <form class="form" th:method="post" th:action="@{/login}">
+            <label aria-hidden="true">登录</label>
+            <p style="color: red;margin: 0;height: 22px;text-align: center;"><span th:text="${msg}"></span></p>
+            <input class="input" type="text" name="username" placeholder="Username" value="admin" required="">
+            <input class="input" type="password" name="password" placeholder="Password" value="123" required="">
+            <div style="display: flex;gap:10px">
+                <input class="input checking" type="text" name="verifyCode" placeholder="验证码" required="">
+                <img alt="单击图片刷新！" style="border-radius: 4px" src="/common/kaptcha"
+                     onclick="this.src='/common/kaptcha?d='+new Date()*1">
+            </div>
+            <button type="submit">登录</button>
+            <a style="color: white;text-decoration: none" th:href="@{/register}">注册</a>
+            <a style="color: white;text-decoration: none" th:href="@{/register}">找回密码</a>
+        </form>
+
+    </div>
+</div>
+</body>
+</html>
